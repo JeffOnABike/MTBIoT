@@ -1,3 +1,7 @@
+'''
+This module reads a gpx file specified by the user in the /raw_data folder then processes and saves it as a pickled pandas dataframe in the data/ folder. 
+'''
+
 import os
 import argparse
 import pandas as pd
@@ -6,10 +10,12 @@ from bs4 import BeautifulSoup
 
 def parse_trkpt(trkpt, hr_offset = 7):
 	'''
-	# parses each trackpoint in the gpx file's trkseg
+	parses each trackpoint in the gpx file's trkseg
+	
 	INPUT:
 		trkpt:	bs4.element.Tag
 		hr_offset: int (CA = 7)
+			this needs some work - probably as a cli arg to make it robust!
 
 	OUTPUT:
 		[date_time, lat, lon, ele] : list
@@ -32,9 +38,11 @@ def parse_trkpt(trkpt, hr_offset = 7):
 
 def write_gpx_pickle(gpx_df, gpx_fname):
 	'''
-	checks for existence of data dir, then writes gpx_df to it as a pickle
+	checks for existence of data/ dir, then writes gpx_df to it as a pickle
+	
 	INPUT:
 		gpx_df: pandas Dataframe
+		gpx_fname: str
 	'''
 	cwd = os.getcwd()
 	if 'data' not in os.listdir(cwd):
@@ -45,12 +53,14 @@ def write_gpx_pickle(gpx_df, gpx_fname):
 
 def process_gpx(gpx, gpx_fname, write_pickle = False):
 	'''
-	processes a full gpx file read in as text
+	processes a full gpx file read in as text, optionally writes it to a pickle file
 
 	INPUT:
 		gpx: str
+		gpx_fname: str
+		write_pickle: bool
 	OUTPUT:
-		gpx_df
+		gpx_df: pandas DataFrame
 	'''
 	soup = BeautifulSoup(gpx)
 	seg = soup.find('trkseg')
