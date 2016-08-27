@@ -19,12 +19,14 @@ Refer to requirements.txt for environment packages and versions, and to the inst
 ### From Strava 
 
 While logged into your Strava account:
+
 1. Select Segment
-2. Export the GPX 
-  - Actions (wrench icon) >> Export GPX
-  - filename format: SEGMENT_NAME.gpx)
+
+2. Export the GPX (Actions (wrench icon) >> Export GPX)
+
 3. If not already there, move it to ```/raw_data``` 
-  - e.g. my last ride's gpx file is in MTBIoT/raw_data/JMP_Quickie.gpx
+
+As an example, my last ride's gpx filepath is MTBIoT/raw_data/JMP_Quickie.gpx
 
 ### From command line:
 ```
