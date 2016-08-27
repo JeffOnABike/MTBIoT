@@ -1,13 +1,34 @@
 # MTBIoT
 
-use as working dir:
+This project aims to provide a common place for cycling enthusiasts & pythonistas to acquire and build tools for ride/route analyses and more.
+
+## General use instructions
+Once forked, use as current working directory:
 /MTBIoT
+refer to requirements.txt for environment packages and versions
 
-Directions for writing to the data folder:
+## Writing your own data
 
-In Strava:
+### From Strava 
+
+While logged into your Strava account:
 1. Select Segment
-2. Actions (wrench icon) >> Export GPX
-	filename format: Segment_Name.gpx
-3. If not already downloaded to directory, move it(in my case /MTBIoT/raw_data)
-	/raw_data/JMP_Quickie.gpx  
+2. Export the GPX
+	* Actions (wrench icon) >> Export GPX
+	* filename format: Segment_Name.gpx
+3. If not already downloaded to directory, move it to /raw_data
+	* e.g. my last ride's gpx file is in MTBIoT/raw_data/JMP_Quickie.gpx  
+
+### From command line:
+
+$ python gpx_to_df.py SEGMENT_NAME.gpx
+
+## Loading data from data/
+
+In a python environment:
+```
+import pandas as pd
+gpx_df = pd.read_pickle('data/SEGMENT_NAME.pkl')
+```
+
+You now have a date-time indexed pandas dataframe of the trackpoints recorded from your Strava segment.

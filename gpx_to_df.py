@@ -1,6 +1,8 @@
+import os
+import argparse
+import pandas as pd
 from datetime import datetime, timedelta
 from bs4 import BeautifulSoup
-import os
 
 def parse_trkpt(trkpt, hr_offset = 7):
 	'''
@@ -28,19 +30,20 @@ def parse_trkpt(trkpt, hr_offset = 7):
 	ele = float(trkpt.ele.text)
 	return [date_time, lat, lon, ele]
 
-def write_gpx_pickle(gpx_df):
+def write_gpx_pickle(gpx_df, gpx_fname):
 	'''
 	checks for existence of data dir, then writes gpx_df to it as a pickle
 	INPUT:
 		gpx_df: pandas Dataframe
 	'''
 	cwd = os.getcwd()
-	if 'data' not in cwd:
+	if 'data' not in os.listdir(cwd):
 		os.mkdir('data')
-	gpx_df.to_pickle('data/gpx_df.pkl')
+	print 'writing gpx_data to %s.pkl' % gpx_fname	
+	gpx_df.to_pickle('data/%s.pkl' % gpx_fname)
 	return 
 
-def process_gpx(gpx, write_pickle = False):
+def process_gpx(gpx, gpx_fname, write_pickle = False):
 	'''
 	processes a full gpx file read in as text
 
@@ -57,10 +60,15 @@ def process_gpx(gpx, write_pickle = False):
 	gpx_df = pd.DataFrame(data = data, columns = cols)
 	gpx_df.set_index('date_time', inplace = True)
 	if write_pickle:
-		write_gpx_pickle(gpx_df)
+		gpx_fname = gpx_fname.split('.')[0]
+		write_gpx_pickle(gpx_df, gpx_fname)
 	return gpx_df
 
+
 if __name__ == '__main__':
-	with open('data/JMP_Quickie.gpx', 'r') as f:
+	parser = argparse.ArgumentParser()
+	parser.add_argument('gpx_fname', help = 'name of the gpx file in the raw_data folder')
+	args = parser.parse_args()
+	with open('raw_data/%s' % args.gpx_fname, 'r') as f:
 	    gpx = f.read()
-	process_gpx(gpx, write_pickle = True)
+	process_gpx(gpx, args.gpx_fname, write_pickle = True)
